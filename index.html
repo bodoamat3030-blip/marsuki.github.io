@@ -186,6 +186,18 @@
     height: 100%;
     object-fit: cover; /* Penting! Supaya foto tidak lonjong/gepeng */
   }
+  .profile-img-box::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent 0%, rgba(0, 245, 255, 0.1) 0.5%, transparent 1%);
+    pointer-events: none;
+    animation: scanline 5s linear infinite;
+  }
+  @keyframes photo-glow {
+    from { box-shadow: 0 0 10px var(--neon-cyan); }
+    to { box-shadow: 0 0 25px var(--neon-cyan), 0 0 40px rgba(0, 245, 255, 0.4); }
+}
   .hero-tag {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.7rem;
@@ -307,44 +319,69 @@
     opacity: 0;
     animation: fadeIn 1s 0.5s forwards;
   }
-  .cyber-circle {
+  CSS
+  /* EFEK GLITCH & CAHAYA FOTO */
+  .profile-img-box {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 15px;
+    border: 2px solid var(--neon-cyan);
     position: relative;
-    width: 340px; height: 340px;
+    overflow: hidden;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+    box-shadow: 0 0 20px var(--neon-cyan), inset 0 0 10px var(--neon-cyan);
+    animation: photo-glow 2s infinite alternate;
   }
-  .circle-ring {
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    border: 1px solid rgba(0,245,255,0.15);
+
+  .profile-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: cyan;
   }
-  .circle-ring:nth-child(1) { animation: spin 20s linear infinite; border-top-color: var(--neon-cyan); border-width: 2px; }
-  .circle-ring:nth-child(2) { inset: 20px; animation: spin 15s linear infinite reverse; border-right-color: var(--neon-pink); }
-  .circle-ring:nth-child(3) { inset: 40px; animation: spin 25s linear infinite; border-bottom-color: var(--neon-purple); }
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .circle-core {
-    position: absolute; inset: 70px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,245,255,0.1) 0%, transparent 70%);
-    border: 1px solid rgba(0,245,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Orbitron', monospace;
-    font-size: 0.6rem;
-    color: var(--neon-cyan);
-    letter-spacing: 2px;
-    flex-direction: column; gap: 4px;
-    text-align: center;
-  }
-  .circle-core .big { font-size: 2rem; font-weight: 900; }
-  .corner-deco {
+
+  /* Animasi Glitch pada Foto */
+  .profile-img-box::before {
+    content: "";
     position: absolute;
-    width: 20px; height: 20px;
-    border-color: var(--neon-cyan);
-    border-style: solid;
-    opacity: 0.6;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent 0%, rgba(0, 245, 255, 0.1) 0.5%, transparent 1%);
+    pointer-events: none;
+    animation: scanline 5s linear infinite;
   }
-  .corner-deco.tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
-  .corner-deco.tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; }
-  .corner-deco.bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; }
-  .corner-deco.br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+  @keyframes photo-glow {
+    from { box-shadow: 0 0 10px var(--neon-cyan); }
+    to { box-shadow: 0 0 25px var(--neon-cyan), 0 0 40px rgba(0, 245, 255, 0.4); }
+  }
+
+  /* EFEK BOLA ENERGI JARVIS (Untuk bagian Full Stack) */
+  .stack-center { /* Ganti class ini sesuai class lingkaran tengahmu */
+    position: relative;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 245, 255, 0.4) 0%, transparent 70%);
+    box-shadow: 0 0 50px var(--neon-cyan);
+    animation: jarvis-pulse 3s infinite ease-in-out;
+  }
+  .stack-center::after {
+    content: '';
+    position: absolute;
+    top: -10%; left: -10%; width: 120%; height: 120%;
+    border: 1px solid var(--neon-cyan);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes jarvis-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 80px var(--neon-cyan); }
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
 
   /* STATS BAR */
   .hero-stats {
@@ -963,22 +1000,13 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div class="cyber-circle">
-        <div class="circle-ring"></div>
-        <div class="circle-ring"></div>
-        <div class="circle-ring"></div>
-        <div class="circle-core">
-          <span>FULL</span>
-          <span class="big">{}</span>
-          <span>STACK</span>
-        </div>
-        <div class="corner-deco tl"></div>
-        <div class="corner-deco tr"></div>
-        <div class="corner-deco bl"></div>
-        <div class="corner-deco br"></div>
+      <div class="circle-container stack-center">
+       <div class="inner-circle">
+        <span>FULL</span>
+        <div class="icon">{ }</div>
+        <span>STACK</span>
+       </div>
       </div>
-    </div>
-  </div>
 </section>
 
 <div class="neon-divider"></div>
