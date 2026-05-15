@@ -358,29 +358,70 @@
     to { box-shadow: 0 0 25px var(--neon-cyan), 0 0 40px rgba(0, 245, 255, 0.4); }
   }
 
-  /* EFEK BOLA ENERGI JARVIS (Untuk bagian Full Stack) */
-  .stack-center { /* Ganti class ini sesuai class lingkaran tengahmu */
-    position: relative;
+  /* BOLA ENERGI JARVIS SUPER */
+  .stack-center {
+    width: 200px; /* Ukuran bola */
+    height: 200px;
+    margin: 40px auto;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 245, 255, 0.4) 0%, transparent 70%);
-    box-shadow: 0 0 50px var(--neon-cyan);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(0, 245, 255, 0.2) 0%, transparent 70%);
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.5), inset 0 0 20px rgba(0, 245, 255, 0.2);
     animation: jarvis-pulse 3s infinite ease-in-out;
+    border: 1px solid rgba(0, 245, 255, 0.3);
   }
+
+  /* Lingkaran Berputar Luar */
+  .stack-center::before {
+    content: '';
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    border: 2px dashed var(--neon-cyan);
+    border-radius: 50%;
+    animation: spin 4s linear infinite;
+    opacity: 0.6;
+  }
+
+  /* Lingkaran Berputar Dalam (Arah Terbalik) */
   .stack-center::after {
     content: '';
     position: absolute;
-    top: -10%; left: -10%; width: 120%; height: 120%;
+    width: 120%;
+    height: 120%;
     border: 1px solid var(--neon-cyan);
     border-radius: 50%;
     border-top-color: transparent;
-    animation: spin 1s linear infinite;
+    border-bottom-color: transparent;
+    animation: spin-reverse 2s linear infinite;
+    opacity: 0.4;
   }
+
+  /* Animasi Jarvis */
   @keyframes jarvis-pulse {
-    0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 80px var(--neon-cyan); }
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 245, 255, 0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(0, 245, 255, 0.8); }
   }
+
   @keyframes spin {
     to { transform: rotate(360deg); }
+  }
+
+  @keyframes spin-reverse {
+    to { transform: rotate(-360deg); }
+  }
+
+  /* Supaya teks di dalamnya tetap rapi */
+  .stack-center span, .stack-center .icon {
+    z-index: 5;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+    margin: 2px 0;
   }
 
   /* STATS BAR */
@@ -1000,12 +1041,10 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div class="circle-container stack-center">
-       <div class="inner-circle">
-        <span>FULL</span>
-        <div class="icon">{ }</div>
-        <span>STACK</span>
-       </div>
+      <div class="stack-center">
+       <span>FULL</span>
+        <div class="icon" style="font-size: 2rem;">{ }</div>
+       <span>STACK</span>
       </div>
 </section>
 
