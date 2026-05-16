@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Am Mar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --neon-cyan: #00f5ff;
+    --neon-pink: #ff006e;
+    --neon-green: #39ff14;
+    --neon-purple: #bf00ff;
+    --bg-dark: #030712;
+    --bg-card: #0d1117;
+    --bg-card2: #0a0f1a;
+    --text-dim: #4a5568;
+    --text-mid: #8892a4;
+    --grid-line: rgba(0,245,255,0.04);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+
+  body {
+    background: var(--bg-dark);
+    color: #c9d1d9;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  #cursor {
+    position: fixed; z-index: 9999;
+    width: 12px; height: 12px;
+    background: var(--neon-cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, background 0.2s;
+    box-shadow: 0 0 10px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+  }
+  #cursor-ring {
+    position: fixed; z-index: 9998;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,245,255,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease-out;
+  }
+  body:hover #cursor { opacity: 1; }
+  .avatar-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 2px solid var(--neon-cyan);
+    margin: 40px auto 20px;
+    clip-path: polygon(20% 0, 100% 0, 100% 80%, 80% 100%, 0 100%, 0 20%);
+    box-shadow: 0 0 15px var(--neon-cyan);
+    background: var(--bg-card);
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9997;
+    animation: scanMove 8s linear infinite;
+  }
+  @keyframes scanMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100vh; }
+  }
+
+  /* GRID BACKGROUND */
+  .grid-bg {
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 60px;
+    height: 70px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(3,7,18,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,245,255,0.1);
+  }
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan);
+    letter-spacing: 4px;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--neon-pink); text-shadow: 0 0 20px var(--neon-pink); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-mid);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.3s;
+  }
+  .nav-links a::before {
+    content: '//';
+    color: var(--neon-cyan);
+    opacity: 0;
+    margin-right: 4px;
+    transition: opacity 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--neon-cyan);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .nav-links a:hover { color: var(--neon-cyan); }
+  .nav-links a:hover::before { opacity: 1; }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 120px 60px 60px;
+    overflow: hidden;
+  }
+  .hero-inner {
+    max-width: 1100px; width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* ══════════════════════════════════
+     FOTO + GLITCH PETIR
+  ══════════════════════════════════ */
+  .photo-lightning-wrap {
+    margin-bottom: 28px;
+    position: relative;
+    width: 160px;
+  }
+
+  .lightning-frame {
+    position: relative;
+    width: 160px;
+    height: 160px;
+  }
+
+  .profile-img-box {
+    width: 160px;
+    height: 160px;
+    border: 2px solid var(--neon-cyan);
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-card);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clip-path: polygon(12% 0, 100% 0, 100% 88%, 88% 100%, 0 100%, 0 12%);
+    box-shadow:
+      0 0 20px rgba(0,245,255,0.5),
+      0 0 60px rgba(0,245,255,0.2),
+      inset 0 0 20px rgba(0,245,255,0.1);
+    animation: photoAuraPulse 3s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  @keyframes photoAuraPulse {
+    0%,100% { box-shadow: 0 0 20px rgba(0,245,255,0.5), 0 0 60px rgba(0,245,255,0.2); }
+    50% { box-shadow: 0 0 40px rgba(0,245,255,0.9), 0 0 100px rgba(0,245,255,0.4), 0 0 20px rgba(255,0,110,0.3); }
+  }
+
+  .profile-img-box img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  /* GLITCH LAYERS — petir warna */
+  .glitch-layer {
+    position: absolute; inset: 0;
+    background-image: inherit;
+    background-size: cover;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .g1 { background: rgba(0,245,255,0.25); animation: gLayer1 5s infinite; }
+  .g2 { background: rgba(255,0,110,0.2); animation: gLayer2 5s infinite; }
+  .g3 { background: rgba(57,255,20,0.15); animation: gLayer3 5s infinite; }
+
+  @keyframes gLayer1 {
+    0%,88%,100% { opacity:0; transform: translateX(0); clip-path: none; }
+    89% { opacity:1; transform: translateX(-6px); clip-path: polygon(0 15%, 100% 15%, 100% 30%, 0 30%); }
+    90% { opacity:1; transform: translateX(6px); clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%); }
+    91% { opacity:0; }
+  }
+  @keyframes gLayer2 {
+    0%,82%,100% { opacity:0; transform: translateX(0); }
+    83% { opacity:1; transform: translateX(8px); clip-path: polygon(0 40%, 100% 40%, 100% 55%, 0 55%); }
+    85% { opacity:1; transform: translateX(-4px); clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%); }
+    86% { opacity:0; }
+  }
+  @keyframes gLayer3 {
+    0%,93%,100% { opacity:0; }
+    94% { opacity:1; transform: translateX(-3px) scaleY(1.02); clip-path: polygon(0 70%, 100% 70%, 100% 90%, 0 90%); }
+    95% { opacity:0; }
+  }
+
+  /* Petir sudut */
+  .bolt {
+    position: absolute;
+    width: 28px; height: 56px;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px currentColor);
+    animation: boltFlash 4s infinite;
+  }
+  .bolt.tl { top: -12px; left: -8px; animation-delay: 0s; }
+  .bolt.tr { top: -12px; right: -8px; animation-delay: 1s; transform: scaleX(-1); }
+  .bolt.bl { bottom: -12px; left: -8px; animation-delay: 2s; transform: scaleY(-1); }
+  .bolt.br { bottom: -12px; right: -8px; animation-delay: 1.5s; transform: scale(-1); }
+
+  @keyframes boltFlash {
+    0%,85%,100% { opacity: 0; }
+    86% { opacity: 1; }
+    88% { opacity: 0.4; }
+    90% { opacity: 1; }
+    92% { opacity: 0; }
+  }
+
+  /* Canvas petir arc */
+  .lightning-canvas {
+    position: absolute;
+    inset: -30px;
+    width: 220px; height: 220px;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* ══════════════════════════════════
+     BOLA ENERGI JARVIS (Canvas)
+  ══════════════════════════════════ */
+  .jarvis-orb-wrap {
+    position: relative;
+    width: 340px; height: 340px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #jarvisCanvas {
+    position: absolute; inset: 0;
+    width: 340px; height: 340px;
+  }
+  .jarvis-core {
+    position: relative; z-index: 5;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    pointer-events: none;
+  }
+  .jarvis-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem; font-weight: 700;
+    color: var(--neon-cyan);
+    letter-spacing: 4px;
+    text-shadow: 0 0 12px var(--neon-cyan);
+  }
+  .jarvis-icon {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.2rem; font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 30px var(--neon-cyan), 0 0 60px rgba(0,245,255,0.5);
+    animation: jarvisIconPulse 2s ease-in-out infinite;
+  }
+  @keyframes jarvisIconPulse {
+    0%,100% { transform: scale(1); text-shadow: 0 0 30px var(--neon-cyan); }
+    50% { transform: scale(1.08); text-shadow: 0 0 60px var(--neon-cyan), 0 0 100px rgba(0,245,255,0.6); }
+  }
+
+  /* ══════════════════════════════════
+     AUDIO BUTTON
+  ══════════════════════════════════ */
+  #audioBtn {
+    position: fixed; bottom: 30px; right: 30px;
+    z-index: 2000;
+    width: 48px; height: 48px;
+    border: 1px solid rgba(0,245,255,0.3);
+    border-radius: 50%;
+    background: rgba(3,7,18,0.9);
+    color: var(--neon-cyan);
+    font-size: 1.2rem;
+    cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+    box-shadow: 0 0 12px rgba(0,245,255,0.2);
+    backdrop-filter: blur(10px);
+  }
+  #audioBtn:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 24px rgba(0,245,255,0.5);
+    transform: scale(1.1);
+  }
+  #audioBtn.playing { border-color: var(--neon-pink); box-shadow: 0 0 24px rgba(255,0,110,0.5); color: var(--neon-pink); }
+
+  /* STATS BAR */
+  .hero-stats {
+    display: flex; gap: 40px;
+    margin-top: 50px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(0,245,255,0.1);
+    opacity: 0;
+    animation: fadeUp 0.6s 1.2s forwards;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem; font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan);
+  }
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: var(--text-dim);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--neon-pink);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-tag::before { content: '> '; }
+  .hero-name {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(0,245,255,0.3);
+    opacity: 0;
+    animation: fadeUp 0.6s 0.4s forwards;
+  }
+  .hero-name .glitch {
+    position: relative;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px var(--neon-cyan), 0 0 80px var(--neon-cyan);
+  }
+  .hero-name .glitch::before,
+  .hero-name .glitch::after {
+    content: attr(data-text);
+    position: absolute; left: 0; top: 0;
+  }
+  .hero-name .glitch::before {
+    color: var(--neon-pink);
+    text-shadow: none;
+    animation: glitch1 3s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  }
+  .hero-name .glitch::after {
+    color: var(--neon-green);
+    text-shadow: none;
+    animation: glitch2 3s infinite;
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  }
+  @keyframes glitch1 {
+    0%,90%,100% { transform: translateX(0); opacity: 0; }
+    92% { transform: translateX(-4px); opacity: 0.8; }
+    94% { transform: translateX(4px); opacity: 0.8; }
+    96% { transform: translateX(0); opacity: 0; }
+  }
+  @keyframes glitch2 {
+    0%,88%,100% { transform: translateX(0); opacity: 0; }
+    90% { transform: translateX(4px); opacity: 0.8; }
+    93% { transform: translateX(-4px); opacity: 0.8; }
+    95% { transform: translateX(0); opacity: 0; }
+  }
+  .hero-role {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: var(--neon-green);
+    letter-spacing: 3px;
+    margin-top: 16px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.6s forwards;
+  }
+  .hero-desc {
+    margin-top: 28px;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-mid);
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.8s forwards;
+  }
+  .hero-cta {
+    display: flex; gap: 20px; margin-top: 40px;
+    opacity: 0;
+    animation: fadeUp 0.6s 1s forwards;
+  }
+  .btn-primary, .btn-ghost {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border-radius: 2px;
+    cursor: none;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.3s;
+  }
+  .btn-primary {
+    background: var(--neon-cyan);
+    color: #000;
+    border: none;
+    box-shadow: 0 0 20px rgba(0,245,255,0.4), inset 0 0 20px rgba(0,245,255,0.1);
+    font-weight: bold;
+  }
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 40px rgba(0,245,255,0.8);
+    transform: translateY(-2px);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--neon-cyan);
+    border: 1px solid rgba(0,245,255,0.4);
+  }
+  .btn-ghost:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(0,245,255,0.05);
+    box-shadow: 0 0 20px rgba(0,245,255,0.2);
+    transform: translateY(-2px);
+  }
+
+  /* HERO VISUAL */
+  .hero-visual {
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    animation: fadeIn 1s 0.5s forwards;
+  }
+  }
+
+  /* ===== SECTION SHARED ===== */
+  .section-header {
+    text-align: center;
+    margin-bottom: 70px;
+  }
+  .section-pre {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--neon-pink);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-pre::before { content: '// '; }
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+  }
+  .section-title span { color: var(--neon-cyan); text-shadow: 0 0 20px var(--neon-cyan); }
+  .section-line {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    margin: 20px auto 0;
+    box-shadow: 0 0 10px var(--neon-cyan);
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+  /* ===== ABOUT ===== */
+  #about { padding: 120px 0; }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-terminal {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,245,255,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5), 0 0 1px rgba(0,245,255,0.3);
+  }
+  .terminal-header {
+    background: #161b22;
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid rgba(0,245,255,0.1);
+  }
+  .t-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .t-dot.r { background: #ff5f57; }
+  .t-dot.y { background: #febc2e; }
+  .t-dot.g { background: #28c840; }
+  .t-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-left: 8px;
+    letter-spacing: 1px;
+  }
+  .terminal-body {
+    padding: 24px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 2;
+  }
+  .t-line { display: flex; gap: 10px; }
+  .t-prompt { color: var(--neon-green); }
+  .t-cmd { color: var(--neon-cyan); }
+  .t-out { color: var(--text-mid); padding-left: 18px; }
+  .t-out span { color: var(--neon-pink); }
+  .t-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--neon-cyan);
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .about-content h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+  .about-content h3 span { color: var(--neon-cyan); }
+  .about-content p {
+    color: var(--text-mid);
+    line-height: 1.9;
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+
+  /* ===== SKILLS ===== */
+  #skills { padding: 120px 0; background: linear-gradient(180deg, transparent, rgba(0,245,255,0.015), transparent); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .skill-card {
+    background: var(--bg-card2);
+    border: 1px solid rgba(0,245,255,0.08);
+    border-radius: 4px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  .skill-card.visible {
+    animation: cardIn 0.5s forwards;
+  }
+  @keyframes cardIn {
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .skill-card:hover { border-color: rgba(0,245,255,0.3); transform: translateY(-4px) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(0,245,255,0.05); }
+  .skill-card:hover::before { opacity: 1; }
+  .skill-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+  .skill-cat {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--neon-pink);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .skill-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--neon-cyan);
+    background: rgba(0,245,255,0.08);
+    border: 1px solid rgba(0,245,255,0.2);
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+
+  /* ===== PROJECTS ===== */
+  #projects { padding: 120px 0; }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .project-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,245,255,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s;
+    transform: translateY(60px);
+    opacity: 0;
+  }
+  .project-card.visible {
+    animation: cardIn 0.5s forwards;
+  }
+  .project-card:hover { border-color: rgba(0,245,255,0.4); transform: translateY(-6px) !important; box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 30px rgba(0,245,255,0.08); }
+  .project-banner {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .project-card:nth-child(1) .project-banner { background: linear-gradient(135deg, #0a1628, #0d2137); }
+  .project-card:nth-child(2) .project-banner { background: linear-gradient(135deg, #160a28, #1a0d2e); }
+  .project-card:nth-child(3) .project-banner { background: linear-gradient(135deg, #0a2316, #0d2e1a); }
+  .project-card:nth-child(4) .project-banner { background: linear-gradient(135deg, #28100a, #2e140d); }
+  .project-banner-icon { font-size: 3.5rem; filter: drop-shadow(0 0 20px currentColor); opacity: 0.9; }
+  .proj-corner {
+    position: absolute;
+    width: 16px; height: 16px;
+    border-color: rgba(0,245,255,0.3);
+    border-style: solid;
+  }
+  .proj-corner.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+  .proj-corner.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+  .project-body { padding: 24px 28px; }
+  .project-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .project-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .project-desc {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .project-foot {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .project-stack { display: flex; gap: 6px; flex-wrap: wrap; }
+  .project-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--neon-cyan);
+    text-decoration: none;
+    letter-spacing: 2px;
+    display: flex; align-items: center; gap: 6px;
+    transition: all 0.3s;
+  }
+  .project-link::after { content: '→'; transition: transform 0.3s; }
+  .project-link:hover { text-shadow: 0 0 10px var(--neon-cyan); }
+  .project-link:hover::after { transform: translateX(4px); }
+
+  /* ===== CONTACT ===== */
+  #contact { padding: 120px 0 160px; }
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .contact-info h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    color: #fff;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .contact-info p {
+    color: var(--text-mid);
+    line-height: 1.9;
+    margin-bottom: 40px;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .c-link {
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    text-decoration: none;
+    padding: 14px 18px;
+    border: 1px solid rgba(0,245,255,0.1);
+    border-radius: 4px;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+  }
+  .c-link-icon { font-size: 1.2rem; }
+  .c-link:hover {
+    color: var(--neon-cyan);
+    border-color: rgba(0,245,255,0.4);
+    background: rgba(0,245,255,0.04);
+    padding-left: 24px;
+    box-shadow: 0 0 20px rgba(0,245,255,0.05);
+  }
+
+  /* FORM */
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--neon-cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .form-input, .form-textarea {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,245,255,0.12);
+    border-radius: 4px;
+    padding: 14px 18px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s;
+    cursor: none;
+  }
+  .form-input:focus, .form-textarea:focus {
+    border-color: rgba(0,245,255,0.5);
+    background: rgba(0,245,255,0.03);
+    box-shadow: 0 0 20px rgba(0,245,255,0.08);
+  }
+  .form-textarea { min-height: 120px; resize: vertical; }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid rgba(0,245,255,0.08);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+  footer span { color: var(--neon-cyan); }
+
+  /* SCROLL PROGRESS */
+  #progress {
+    position: fixed; top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    z-index: 9996;
+    width: 0%;
+    transition: width 0.1s;
+    box-shadow: 0 0 8px var(--neon-cyan);
+  }
+
+  /* FLOATING PARTICLES */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: float linear infinite;
+    z-index: 0;
+  }
+  @keyframes float {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-100px) scale(1); opacity: 0; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity: 0; transform: translateY(50px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* NEON HORIZONTAL LINE */
+  .neon-divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,245,255,0.3), rgba(255,0,110,0.3), transparent);
+    margin: 0;
+  }
+
+  /* ===== FLOATING SOCIALS SIDEBAR ===== */
+  .socials-float {
+    position: fixed;
+    left: 28px;
+    bottom: 0;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+  }
+  .socials-float::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(0,245,255,0.5), transparent);
+    margin-top: 6px;
+  }
+  .sf-link {
+    display: flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px;
+    border: 1px solid rgba(0,245,255,0.15);
+    border-radius: 4px;
+    background: rgba(3,7,18,0.8);
+    color: var(--text-mid);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .sf-link:hover {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    background: rgba(0,245,255,0.08);
+    box-shadow: 0 0 16px rgba(0,245,255,0.25);
+    transform: translateX(4px);
+  }
+  .sf-link .sf-tooltip {
+    position: absolute;
+    left: 48px;
+    background: var(--bg-card);
+    border: 1px solid rgba(0,245,255,0.2);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--neon-cyan);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .sf-link:hover .sf-tooltip { opacity: 1; }
+
+  /* SOSMED ICONS SVG */
+  .sf-icon { width: 18px; height: 18px; fill: currentColor; }
+
+  /* Update contact links color per platform */
+  .c-link.github:hover { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.04); }
+  .c-link.instagram:hover { color: #e1306c; border-color: rgba(225,48,108,0.4); background: rgba(225,48,108,0.04); }
+  .c-link.tiktok:hover { color: #000000; border-color: rgba(29,161,242,0.4); background: rgba(29,161,242,0.04); }
+  .c-link.wa:hover { color: #25d366; border-color: rgba(37,211,102,0.4); background: rgba(37,211,102,0.04); }
+
+  /* SOSMED SECTION */
+  #socials { padding: 80px 0; background: linear-gradient(180deg, transparent, rgba(255,0,110,0.015), transparent); }
+  .socials-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .social-big-card {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 32px 28px;
+    background: var(--bg-card2);
+    border: 1px solid rgba(0,245,255,0.08);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-mid);
+    min-width: 140px;
+    transition: all 0.35s;
+    position: relative;
+    overflow: hidden;
+  }
+  .social-big-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+  .social-big-card.gh::before { background: linear-gradient(90deg, #fff, #6e40c9); }
+  .social-big-card.li::before { background: linear-gradient(90deg, #fff, #00a0dc); }
+  .social-big-card.ig::before { background: linear-gradient(90deg, #833ab4, #e1306c, #fd1d1d, #fcaf45); }
+  .social-big-card.tt::before { background: linear-gradient(90deg, #fff, #0e7abf); }
+  .social-big-card.wa::before { background: linear-gradient(90deg, #25d366, #128c7e); }
+  .social-big-card.yt::before { background: linear-gradient(90deg, #ff0000, #cc0000); }
+
+  .social-big-card:hover { transform: translateY(-6px); border-color: rgba(0,245,255,0.25); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+  .social-big-card:hover::before { opacity: 1; }
+  .social-big-card:hover .sb-name { color: #fff; }
+
+  .sb-icon { font-size: 2rem; filter: drop-shadow(0 0 8px currentColor); }
+  .sb-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .sb-handle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .socials-float { display: none; }
+    nav { padding: 0 24px; }
+    .nav-links { gap: 24px; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 40px; }
+    .hero-stats { gap: 24px; }
+    section { padding-left: 20px; padding-right: 20px; }
+    .container { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="progress"></div>
+<div class="grid-bg"></div>
+
+<!-- PARTICLES -->
+<div id="particles"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">MAR<span>SUKI</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#socials">Sosmed</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- FLOATING SOCIALS SIDEBAR -->
+<div class="socials-float">
+  <a href="https://github.com/marsuki" target="_blank" class="sf-link">
+    <svg class="sf-icon" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    <span class="sf-tooltip">GitHub</span>
+  </a>
+  <a href="https://tiktok.com/@markeyyy_s" target="_blank" class="sf-link">
+    <svg class="sf-icon" viewBox="0 0 24 24"><path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.048v13.557a2.729 2.729 0 1 1-2.729-2.73 2.73 2.73 0 0 1 .57.06V9.794a5.822 5.822 0 1 0 5.208 5.763V8.687a7.838 7.838 0 0 0 4.77 1.624V7.264a4.821 4.821 0 0 1-1-.578z"/></svg>
+    <span class="sf-tooltip">TikTok</span>
+  </a>
+  <a href="https://instagram.com/marsukiII_596" target="_blank" class="sf-link">
+    <svg class="sf-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+    <span class="sf-tooltip">Instagram</span>
+  </a>
+  <a href="https://wa.me/6285255030248" target="_blank" class="sf-link">
+    <svg class="sf-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span class="sf-tooltip">WhatsApp</span>
+  </a>
+  <a href="Gmailto:mar70648@gmail.com" class="sf-link">
+    <svg class="sf-icon" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-.9.732-1.636 1.636-1.636h.909L12 10.09l9.455-6.27h.909A1.636 1.636 0 0124 5.457z"/></svg>
+    <span class="sf-tooltip">Gmail</span>
+  </a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+
+    <!-- KOLOM KIRI: Foto + Teks -->
+    <div class="hero-left">
+      <!-- FOTO DENGAN GLITCH PETIR -->
+      <div class="photo-lightning-wrap">
+        <div class="lightning-frame">
+          <div class="profile-img-box">
+            <img src="profil.jpg" alt="Marsuki">
+            <!-- Layer glitch overlay -->
+            <div class="glitch-layer g1"></div>
+            <div class="glitch-layer g2"></div>
+            <div class="glitch-layer g3"></div>
+          </div>
+          <!-- Petir sudut -->
+          <svg class="bolt tl" viewBox="0 0 40 80"><polyline points="30,0 10,40 22,40 5,80" fill="none" stroke="#00f5ff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <svg class="bolt tr" viewBox="0 0 40 80"><polyline points="10,0 28,38 16,38 33,80" fill="none" stroke="#ff006e" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="bolt bl" viewBox="0 0 40 80"><polyline points="32,0 12,42 24,42 6,80" fill="none" stroke="#bf00ff" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="bolt br" viewBox="0 0 40 80"><polyline points="8,0 26,40 15,40 30,80" fill="none" stroke="#39ff14" stroke-width="2" stroke-linecap="round"/></svg>
+          <!-- Arc petir animasi -->
+          <canvas class="lightning-canvas" id="lightningCanvas" width="220" height="220"></canvas>
+        </div>
+      </div>
+
+      <p class="hero-tag">Initializing profile...</p>
+      <h1 class="hero-name">
+        <div>MAR</div>
+        <div class="glitch" data-text="SUKI_">SUKI_</div>
+      </h1>
+      <p class="hero-role">Fullstack &amp; All Role</p>
+      <p class="hero-desc">Membangun sistem yang cepat, skalabel, dan andal. Dari sisi server yang kuat hingga antarmuka yang responsif — setiap baris kode dibuat dengan presisi.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">LIHAT PROYEK</a>
+        <a href="#contact" class="btn-ghost">HUBUNGI AKU</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num" data-target="1">0</span>
+          <span class="stat-label">Pemula</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="4">0</span>
+          <span class="stat-label">Proyek Selesai</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="10">0</span>
+          <span class="stat-label">Teknologi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- KOLOM KANAN: Bola Energi Jarvis -->
+    <div class="hero-visual">
+      <div class="jarvis-orb-wrap">
+        <canvas id="jarvisCanvas" width="340" height="340"></canvas>
+        <div class="jarvis-core">
+          <span class="jarvis-text">FULL</span>
+          <div class="jarvis-icon">{ }</div>
+          <span class="jarvis-text">STACK</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-pre">Tentang Saya</p>
+      <h2 class="section-title">WHO AM I<span>?</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-terminal reveal">
+        <div class="terminal-header">
+          <div class="t-dot r"></div>
+          <div class="t-dot y"></div>
+          <div class="t-dot g"></div>
+          <span class="t-title">marsuki@dev ~ whoami</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> cat profile.json</span></div>
+          <div style="height:8px"></div>
+          <div class="t-out">{ </div>
+          <div class="t-out">&nbsp;&nbsp;"name": <span>"Marsuki"</span>,</div>
+          <div class="t-out">&nbsp;&nbsp;"role": <span>"All Role"</span>,</div>
+          <div class="t-out">&nbsp;&nbsp;"location": <span>"Indonesia"</span>,</div>
+          <div class="t-out">&nbsp;&nbsp;"focus": [</div>
+          <div class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span>"Backend API"</span>,</div>
+          <div class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span>"Sistem Scalable"</span>,</div>
+          <div class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span>"Clean Architecture"</span></div>
+          <div class="t-out">&nbsp;&nbsp;],</div>
+          <div class="t-out">&nbsp;&nbsp;"status": <span>"Available 🟢"</span></div>
+          <div class="t-out">}</div>
+          <div style="height:8px"></div>
+          <div class="t-line"><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
+        </div>
+      </div>
+      <div class="about-content reveal">
+        <h3>Halo, Aku <span>Marsuki</span></h3>
+        <p>Seorang remaja yang ambisius terhadap teknologi dan ingin membangun sistem yang tidak hanya bekerja — tapi bekerja dengan baik di skala besar.</p>
+        <p>Aku baru belajar dalam membangun REST API, sistem microservices, dan integrasi database yang efisien. Di sisi frontend, aku memastikan UX yang smooth dan responsif untuk setiap pengguna.</p>
+        <p>Kode yang bagus bukan hanya soal fungsi — tapi juga soal keterbacaan, keandalan, dan kemampuan untuk berkembang seiring waktu.</p>
+        <a href="#contact" class="btn-ghost" style="margin-top:8px; display:inline-flex;">HIRE ME →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-pre">Tech Arsenal</p>
+      <h2 class="section-title">SKILL<span>SET</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon" style="color:#f7df1e">🏗️</div>
+        <div class="skill-cat">Language</div>
+        <div class="skill-name">Civil Engineering</div>
+        <div class="skill-tags">
+          <span class="tag">Structural Draw</span>
+          <span class="tag">BIM Modeling</span>
+          <span class="tag">2D/3D Drafting</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon" style="color:#3776ab">🐍</div>
+        <div class="skill-cat">Language</div>
+        <div class="skill-name">Python</div>
+        <div class="skill-tags">
+          <span class="tag">FastAPI</span>
+          <span class="tag">Django</span>
+          <span class="tag">Asyncio</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon" style="color:#00d9ff">✺</div>
+        <div class="skill-cat">Ai</div>
+        <div class="skill-name">Jarvis</div>
+        <div class="skill-tags">
+          <span class="tag">Machine Learning</span>
+          <span class="tag">AI Assistant</span>
+          <span class="tag">Automation</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon" style="color:#00d4ff">👾</div>
+        <div class="skill-cat">Game</div>
+        <div class="skill-name">Game Of Thrones</div>
+        <div class="skill-tags">
+          <span class="tag">Facker</span>
+          <span class="tag">Infinity</span>
+          <span class="tag">Unreal</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon" style="color:#61dafb">⚛️</div>
+        <div class="skill-cat">Frontend</div>
+        <div class="skill-name">React & Ecosystem</div>
+        <div class="skill-tags">
+          <span class="tag">React</span>
+          <span class="tag">Next.js</span>
+          <span class="tag">Tailwind</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon" style="color:#ff6b6b">🔌</div>
+        <div class="skill-cat">API Design</div>
+        <div class="skill-name">API Architecture</div>
+        <div class="skill-tags">
+          <span class="tag">REST</span>
+          <span class="tag">GraphQL</span>
+          <span class="tag">WebSocket</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-pre">Portofolio</p>
+      <h2 class="section-title">FEATURED <span>WORK</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-banner">
+          <div class="project-banner-icon" style="color:var(--neon-cyan)">🚀</div>
+          <div class="proj-corner tl"></div>
+          <div class="proj-corner br"></div>
+        </div>
+        <div class="project-body">
+          <div class="project-num">PROJECT_01</div>
+          <div class="project-title">Idlix</div>
+          <p class="project-desc">API gateway dengan rate limiting, autentikasi JWT, dan load balancing otomatis untuk microservices dengan throughput tinggi.</p>
+          <div class="project-foot">
+            <div class="project-stack">
+              <span class="tag">Node.js</span>
+              <span class="tag">Redis</span>
+              <span class="tag">Docker</span>
+            </div>
+            <a href="https://z1.idlixku.com/" class="project-link">DETAIL</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-banner">
+          <div class="project-banner-icon" style="color:var(--neon-purple)">🧠</div>
+          <div class="proj-corner tl"></div>
+          <div class="proj-corner br"></div>
+        </div>
+        <div class="project-body">
+          <div class="project-num">PROJECT_02</div>
+          <div class="project-title">DataVault System</div>
+          <p class="project-desc">Sistem manajemen data terdistribusi dengan enkripsi end-to-end dan sinkronisasi real-time antar node yang tersebar.</p>
+          <div class="project-foot">
+            <div class="project-stack">
+              <span class="tag">Python</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">AWS</span>
+            </div>
+            <a href="#" class="project-link">DETAIL</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-banner">
+          <div class="project-banner-icon" style="color:var(--neon-green)">💬</div>
+          <div class="proj-corner tl"></div>
+          <div class="proj-corner br"></div>
+        </div>
+        <div class="project-body">
+          <div class="project-num">PROJECT_03</div>
+          <div class="project-title">NexChat Platform</div>
+          <p class="project-desc">Platform komunikasi real-time berbasis WebSocket dengan support ribuan koneksi concurrent dan fitur grup dinamis.</p>
+          <div class="project-foot">
+            <div class="project-stack">
+              <span class="tag">Socket.io</span>
+              <span class="tag">MongoDB</span>
+              <span class="tag">React</span>
+            </div>
+            <a href="#" class="project-link">DETAIL</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-banner">
+          <div class="project-banner-icon" style="color:var(--neon-pink)">📊</div>
+          <div class="proj-corner tl"></div>
+          <div class="proj-corner br"></div>
+        </div>
+        <div class="project-body">
+          <div class="project-num">PROJECT_04</div>
+          <div class="project-title">MetricsFlow Dashboard</div>
+          <p class="project-desc">Dashboard analytics full-stack untuk monitoring performa sistem dengan visualisasi data real-time dan alert otomatis.</p>
+          <div class="project-foot">
+            <div class="project-stack">
+              <span class="tag">Next.js</span>
+              <span class="tag">FastAPI</span>
+              <span class="tag">Redis</span>
+            </div>
+            <a href="#" class="project-link">DETAIL</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- SOCIALS SECTION -->
+<section id="socials">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-pre">Connect With Me</p>
+      <h2 class="section-title">FIND ME <span>ONLINE</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="socials-grid reveal">
+      <a href="https://github.com/marsuki" target="_blank" class="social-big-card gh">
+        <span class="sb-icon">
+          <svg style="width:36px;height:36px;fill:#fff" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </span>
+        <span class="sb-name">GitHub</span>
+        <span class="sb-handle">@marsuki</span>
+      </a>
+      <a href="https://instagram.com/marsukiii_596" target="_blank" class="social-big-card ig">
+        <span class="sb-icon">
+          <svg style="width:36px;height:36px;fill:#e1306c" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </span>
+        <span class="sb-name">Instagram</span>
+        <span class="sb-handle">@marsukiii_596</span>
+      </a>
+      <a href="https://tiktok.com/@markeyyy_s" target="_blank" class="social-big-card tt">
+        <span class="sb-icon">
+          <svg style="width:36px;height:36px;fill:#fff" viewBox="0 0 24 24"><path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.048v13.557a2.729 2.729 0 1 1-2.729-2.73 2.73 2.73 0 0 1 .57.06V9.794a5.822 5.822 0 1 0 5.208 5.763V8.687a7.838 7.838 0 0 0 4.77 1.624V7.264a4.821 4.821 0 0 1-1-.578z"/></svg>
+        </span>
+        <span class="sb-name">Tiktok</span>
+        <span class="sb-handle">@markeyyy_s</span>
+      </a>
+      <a href="https://wa.me/6285255030248" target="_blank" class="social-big-card wa">
+        <span class="sb-icon">
+          <svg style="width:36px;height:36px;fill:#25d366" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </span>
+        <span class="sb-name">WhatsApp</span>
+        <span class="sb-handle">+62 852-5503-0248</span>
+      </a>
+      <a href="mailto:mar70648@gmail.com" class="social-big-card" style="--c:#00f5ff">
+        <span class="sb-icon">
+          <svg style="width:36px;height:36px;fill:#00f5ff" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-.9.732-1.636 1.636-1.636h.909L12 10.09l9.455-6.27h.909A1.636 1.636 0 0124 5.457z"/></svg>
+        </span>
+        <span class="sb-name">Gmail</span>
+        <span class="sb-handle">mar70648@gmail.com</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-pre">Let's Connect</p>
+      <h2 class="section-title">GET IN <span>TOUCH</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-wrap">
+      <div class="contact-info reveal">
+        <h3>SIAP BERKOLABORASI</h3>
+        <p>Punya proyek menarik? Butuh backend yang solid atau fullstack dev yang berpengalaman? Mari kita ngobrol dan wujudkan ide-mu jadi kenyataan.</p>
+        <div class="contact-links">
+          <a href="mailto:mar70648@gmail.com" class="c-link">
+            <span class="c-link-icon">📧</span>
+            mar70648@gmail.com
+          </a>
+          <a href="https://github.com/marsuki" target="_blank" class="c-link github">
+            <span class="c-link-icon">
+              <svg style="width:18px;height:18px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </span>
+            github.com/marsuki
+          </a>
+          <a href="https://instagram.com/marsukiii_596" target="_blank" class="c-link instagram">
+            <span class="c-link-icon">
+              <svg style="width:18px;height:18px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </span>
+            instagram.com/marsukiii_596
+          </a>
+          <a href="https://wa.me/6285255030248" target="_blank" class="c-link wa">
+            <span class="c-link-icon">
+              <svg style="width:18px;height:18px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </span>
+            +62 852-5503-0248
+          </a>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <div class="form-group">
+          <label class="form-label">// Nama</label>
+          <input type="text" class="form-input" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label class="form-label">// Email</label>
+          <input type="email" class="form-input" placeholder="john@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">// Pesan</label>
+          <textarea class="form-textarea" placeholder="Ceritakan proyekmu..."></textarea>
+        </div>
+        <button class="btn-primary" style="width:100%; justify-content:center; border:none;" onclick="this.textContent='TERKIRIM ✓'; this.style.background='var(--neon-green)'; setTimeout(()=>{this.textContent='KIRIM PESAN'; this.style.background='var(--neon-cyan)'},2000)">
+          KIRIM PESAN
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>DESIGNED &amp; BUILT BY <span>MARSUKI</span> · <span>2025</span> · ALL SYSTEMS OPERATIONAL</p>
+</footer>
+
+<!-- AUDIO INTRO JARVIS -->
+<audio id="jarvisAudio" preload="auto">
+  <!-- Menggunakan Web Audio API untuk generate suara synthwave sendiri — tidak perlu file eksternal -->
+</audio>
+<button id="audioBtn" title="Toggle Music">🔊</button>
+
+<script>
+// CUSTOM CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .skill-card, .project-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    ring.style.borderColor = 'rgba(255,0,110,0.6)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.borderColor = 'rgba(0,245,255,0.5)';
+  });
+});
+
+// SCROLL PROGRESS
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (window.scrollY / h * 100) + '%';
+});
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .skill-card, .project-card').forEach(el => observer.observe(el));
+
+document.querySelectorAll('.skill-card').forEach((card, i) => card.style.animationDelay = (i * 0.1) + 's');
+document.querySelectorAll('.project-card').forEach((card, i) => card.style.animationDelay = (i * 0.12) + 's');
+
+// COUNTER ANIMATION
+function animateCounter(el, target) {
+  let start = 0;
+  const duration = 2000;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target) + '+';
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('.stat-num').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.target));
+      });
+      statsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const statsEl = document.querySelector('.hero-stats');
+if (statsEl) statsObserver.observe(statsEl);
+
+// 3D TILT
+document.querySelectorAll('.project-card, .skill-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    card.style.transform = `translateY(-6px) rotateX(${-dy * 6}deg) rotateY(${dx * 6}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+    card.style.transition = 'transform 0.5s ease';
+  });
+  card.addEventListener('mouseenter', () => card.style.transition = 'transform 0.1s ease');
+});
+
+// PARTICLES
+const particlesContainer = document.getElementById('particles');
+function createParticle() {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 3 + 1;
+  const colors = ['#00f5ff', '#ff006e', '#39ff14', '#bf00ff'];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  p.style.cssText = `width:${size}px;height:${size}px;background:${color};left:${Math.random()*100}vw;box-shadow:0 0 ${size*4}px ${color};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*10}s;`;
+  particlesContainer.appendChild(p);
+  setTimeout(() => p.remove(), 25000);
+}
+setInterval(createParticle, 800);
+
+// PARALLAX
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const heroName = document.querySelector('.hero-name');
+  if (heroName) heroName.style.transform = `translateY(${scrollY * 0.06}px)`;
+  const jarvisWrap = document.querySelector('.jarvis-orb-wrap');
+  if (jarvisWrap) jarvisWrap.style.transform = `translateY(${scrollY * 0.12}px)`;
+});
+
+// ══════════════════════════════════════════
+//  JARVIS ENERGY ORB — Canvas
+// ══════════════════════════════════════════
+(function initJarvis() {
+  const canvas = document.getElementById('jarvisCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 340, H = 340, cx = W/2, cy = H/2, R = 120;
+  let t = 0;
+
+  // Particles in orb
+  const orbs = Array.from({length: 80}, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: Math.random() * R * 0.85,
+    speed: (Math.random() - 0.5) * 0.02,
+    size: Math.random() * 2.5 + 0.5,
+    opacity: Math.random(),
+    color: ['#00f5ff','#bf00ff','#39ff14','#ff006e'][Math.floor(Math.random()*4)]
+  }));
+
+  // Rings
+  const rings = [
+    { r: R * 1.0, speed: 0.008,  tilt: 0.3,  color: '#00f5ff', width: 1.5 },
+    { r: R * 1.15, speed: -0.012, tilt: 1.0,  color: '#ff006e', width: 1.0 },
+    { r: R * 1.28, speed: 0.006,  tilt: 1.8,  color: '#bf00ff', width: 0.8 },
+    { r: R * 0.75, speed: -0.02,  tilt: 0.6,  color: '#39ff14', width: 1.2 },
+  ];
+  let ringAngles = rings.map(() => 0);
+
+  function drawOrb() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Core glow
+    const pulse = 0.85 + 0.15 * Math.sin(t * 1.5);
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * pulse);
+    grad.addColorStop(0,   'rgba(0,245,255,0.35)');
+    grad.addColorStop(0.3, 'rgba(0,180,220,0.18)');
+    grad.addColorStop(0.6, 'rgba(191,0,255,0.08)');
+    grad.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, R * pulse, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Outer corona flare
+    const corona = ctx.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.4);
+    corona.addColorStop(0, 'rgba(0,245,255,0.12)');
+    corona.addColorStop(1, 'rgba(0,245,255,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, R * 1.4, 0, Math.PI * 2);
+    ctx.fillStyle = corona;
+    ctx.fill();
+
+    // Energy arcs inside
+    for (let i = 0; i < 6; i++) {
+      const aStart = t * (0.4 + i * 0.15) + i * 1.05;
+      const aEnd = aStart + 0.4 + Math.sin(t + i) * 0.3;
+      const rr = R * (0.5 + 0.4 * Math.abs(Math.sin(t * 0.3 + i)));
+      ctx.beginPath();
+      ctx.arc(cx, cy, rr, aStart, aEnd);
+      ctx.strokeStyle = `rgba(0,245,255,${0.15 + 0.2 * Math.abs(Math.sin(t + i * 1.3))})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    // Elliptical orbit rings (3D feel)
+    rings.forEach((ring, i) => {
+      ringAngles[i] += ring.speed;
+      const a = ringAngles[i];
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      ctx.scale(1, Math.cos(ring.tilt));
+      ctx.beginPath();
+      ctx.ellipse(0, 0, ring.r, ring.r, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = ring.color;
+      ctx.lineWidth = ring.width;
+      ctx.globalAlpha = 0.55 + 0.25 * Math.sin(t * 0.8 + i);
+      ctx.setLineDash([8, 6]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+
+      // Dot on ring
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      const dotX = ring.r;
+      const dotY = 0;
+      const scaledY = dotY * Math.cos(ring.tilt);
+      ctx.beginPath();
+      ctx.arc(dotX, scaledY, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = ring.color;
+      ctx.shadowColor = ring.color;
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // Floating particles
+    orbs.forEach(p => {
+      p.angle += p.speed;
+      p.opacity = 0.4 + 0.6 * Math.abs(Math.sin(t * 0.5 + p.angle));
+      const x = cx + Math.cos(p.angle) * p.radius;
+      const y = cy + Math.sin(p.angle) * p.radius * 0.6;
+      ctx.beginPath();
+      ctx.arc(x, y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.opacity * 0.7;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 6;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+    });
+
+    // Lightning bolts inside sphere
+    if (Math.random() < 0.04) {
+      drawLightningBolt(ctx, cx, cy, R);
+    }
+
+    // Sphere edge highlight
+    const edgeGrad = ctx.createRadialGradient(cx - R*0.3, cy - R*0.3, 0, cx, cy, R);
+    edgeGrad.addColorStop(0, 'rgba(255,255,255,0.08)');
+    edgeGrad.addColorStop(0.6, 'rgba(0,245,255,0.04)');
+    edgeGrad.addColorStop(1, 'rgba(0,245,255,0.12)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(0,245,255,0.4)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    t += 0.016;
+    requestAnimationFrame(drawOrb);
+  }
+
+  function drawLightningBolt(ctx, cx, cy, R) {
+    const angle = Math.random() * Math.PI * 2;
+    const x0 = cx + Math.cos(angle) * R * 0.1;
+    const y0 = cy + Math.sin(angle) * R * 0.1;
+    const x1 = cx + Math.cos(angle + Math.PI * 0.8) * R * 0.7;
+    const y1 = cy + Math.sin(angle + Math.PI * 0.8) * R * 0.7;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    const steps = 6;
+    for (let i = 1; i <= steps; i++) {
+      const px = x0 + (x1 - x0) * (i / steps) + (Math.random() - 0.5) * 20;
+      const py = y0 + (y1 - y0) * (i / steps) + (Math.random() - 0.5) * 20;
+      ctx.lineTo(px, py);
+    }
+    ctx.strokeStyle = 'rgba(191,0,255,0.85)';
+    ctx.lineWidth = 1;
+    ctx.shadowColor = '#bf00ff';
+    ctx.shadowBlur = 12;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  drawOrb();
+})();
+
+// ══════════════════════════════════════════
+//  LIGHTNING CANVAS — sekitar foto
+// ══════════════════════════════════════════
+(function initPhotoLightning() {
+  const canvas = document.getElementById('lightningCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 220, H = 220;
+  let lt = 0;
+  const bolts = [];
+
+  function newBolt() {
+    const side = Math.floor(Math.random() * 4);
+    let x0, y0, x1, y1;
+    if (side === 0) { x0 = Math.random()*W; y0 = 0; x1 = Math.random()*W; y1 = H*0.4; }
+    else if (side === 1) { x0 = W; y0 = Math.random()*H; x1 = W*0.6; y1 = Math.random()*H; }
+    else if (side === 2) { x0 = Math.random()*W; y0 = H; x1 = Math.random()*W; y1 = H*0.6; }
+    else { x0 = 0; y0 = Math.random()*H; x1 = W*0.4; y1 = Math.random()*H; }
+    const colors = ['#00f5ff','#ff006e','#bf00ff','#39ff14'];
+    bolts.push({ x0,y0,x1,y1, life: 0, maxLife: 8, color: colors[Math.floor(Math.random()*4)] });
+  }
+
+  function drawPhotoLightning() {
+    ctx.clearRect(0,0,W,H);
+    if (Math.random() < 0.06) newBolt();
+    for (let i = bolts.length-1; i >= 0; i--) {
+      const b = bolts[i];
+      b.life++;
+      if (b.life > b.maxLife) { bolts.splice(i,1); continue; }
+      const alpha = 1 - b.life / b.maxLife;
+      ctx.beginPath();
+      ctx.moveTo(b.x0, b.y0);
+      const segs = 5;
+      for (let s = 1; s <= segs; s++) {
+        const px = b.x0 + (b.x1-b.x0)*(s/segs) + (Math.random()-0.5)*18;
+        const py = b.y0 + (b.y1-b.y0)*(s/segs) + (Math.random()-0.5)*18;
+        ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = b.color;
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = alpha;
+      ctx.shadowColor = b.color;
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+    }
+    lt++;
+    requestAnimationFrame(drawPhotoLightning);
+  }
+  drawPhotoLightning();
+})();
+
+// ══════════════════════════════════════════
+//  AUDIO — Synthwave generatif (Web Audio API)
+//  Tidak perlu file eksternal, dibunyikan langsung
+// ══════════════════════════════════════════
+let audioCtx = null;
+let audioPlaying = false;
+let gainNode = null;
+let oscillators = [];
+let lfoInterval = null;
+
+function startAudio() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.5);
+  gainNode.connect(audioCtx.destination);
+
+  // Reverb / delay sederhana
+  const delay = audioCtx.createDelay(0.4);
+  delay.delayTime.value = 0.3;
+  const delayGain = audioCtx.createGain();
+  delayGain.gain.value = 0.25;
+  gainNode.connect(delay);
+  delay.connect(delayGain);
+  delayGain.connect(gainNode);
+
+  // Chord synthwave: Am — F — C — G (loop 8s)
+  const chords = [
+    [220.00, 261.63, 329.63], // Am
+    [174.61, 220.00, 261.63], // F
+    [130.81, 164.81, 196.00], // C
+    [196.00, 246.94, 293.66], // G
+  ];
+
+  let chordIdx = 0;
+  function playChord() {
+    if (!audioPlaying) return;
+    // Fade old
+    oscillators.forEach(o => {
+      try { o.gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.8); } catch(e){}
+      setTimeout(() => { try { o.osc.stop(); } catch(e){} }, 2000);
+    });
+    oscillators = [];
+
+    const freqs = chords[chordIdx % chords.length];
+    freqs.forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = i === 0 ? 'sawtooth' : 'sine';
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(0, audioCtx.currentTime);
+      g.gain.linearRampToValueAtTime(0.06 - i*0.01, audioCtx.currentTime + 0.4);
+      osc.connect(g);
+      g.connect(gainNode);
+      osc.start();
+      oscillators.push({ osc, gain: g });
+    });
+
+    // Sub bass
+    const bass = audioCtx.createOscillator();
+    const bassGain = audioCtx.createGain();
+    bass.type = 'sine';
+    bass.frequency.value = freqs[0] / 2;
+    bassGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    bassGain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + 0.6);
+    bass.connect(bassGain);
+    bassGain.connect(gainNode);
+    bass.start();
+    oscillators.push({ osc: bass, gain: bassGain });
+
+    chordIdx++;
+    if (audioPlaying) lfoInterval = setTimeout(playChord, 4000);
+  }
+  playChord();
+
+  // Arpeggio sparkle
+  let arpStep = 0;
+  const arpNotes = [440, 523.25, 659.25, 783.99, 880, 783.99, 659.25, 523.25];
+  function arpeggio() {
+    if (!audioPlaying) return;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = arpNotes[arpStep % arpNotes.length];
+    g.gain.setValueAtTime(0.025, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    osc.connect(g);
+    g.connect(gainNode);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+    arpStep++;
+    if (audioPlaying) setTimeout(arpeggio, 250);
+  }
+  setTimeout(arpeggio, 800);
+}
+
+function stopAudio() {
+  if (!audioCtx) return;
+  gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.2);
+  clearTimeout(lfoInterval);
+  setTimeout(() => {
+    oscillators.forEach(o => { try { o.osc.stop(); } catch(e){} });
+    oscillators = [];
+    try { audioCtx.close(); } catch(e) {}
+    audioCtx = null;
+  }, 1400);
+}
+
+const audioBtn = document.getElementById('audioBtn');
+audioBtn.addEventListener('click', () => {
+  if (audioPlaying) {
+    audioPlaying = false;
+    audioBtn.textContent = '🔈';
+    audioBtn.classList.remove('playing');
+    stopAudio();
+  } else {
+    audioPlaying = true;
+    audioBtn.textContent = '🔊';
+    audioBtn.classList.add('playing');
+    startAudio();
+  }
+});
+
+// Auto-play saat pertama kali ada interaksi user (browser policy)
+document.addEventListener('click', function autoPlay() {
+  if (!audioPlaying) {
+    audioPlaying = true;
+    audioBtn.textContent = '🔊';
+    audioBtn.classList.add('playing');
+    startAudio();
+  }
+  document.removeEventListener('click', autoPlay);
+}, { once: true });
+
+</script>
+</body>
+</html>
